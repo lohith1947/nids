@@ -98,6 +98,19 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+## Quick start (clone & run)
+
+This repo includes a default trained model (`models/nids_model.joblib`) so the dashboard can run without training first.
+
+```bash
+git clone https://github.com/lohith1947/nids.git
+cd nids
+pip install -r requirements.txt
+streamlit run dashboard.py
+```
+
+Then either replay a `.pcap/.pcapng` file or start live capture (if your system/interface permissions allow).
+
 ## Usage
 
 ### Run the dashboard (Streamlit)
@@ -108,18 +121,18 @@ streamlit run dashboard.py
 ```
 
 Notes:
-- The dashboard expects a trained model at `models/nids_model.joblib` by default.
+- The dashboard loads the trained model from `models/nids_model.joblib` by default (included in this repo for easy setup).
 - You can start live capture from the UI (interface selection supported) or replay a `.pcap/.pcapng` file.
 - Live capture behavior depends on OS/interface permissions and Scapy/Npcap availability.
 
-### Train a model
+### Train or retrain a model
 The training script downloads/loads a CICIDS2017 sample dataset, extracts features, trains a Random Forest model, evaluates it, and saves it to `models/nids_model.joblib`:
 
 ```bash
 python -m NIDS.train_model
 ```
 
-(Adjust the command/module invocation to your working directory/package layout as needed.)
+(Adjust the command/module invocation to your working directory/package layout as needed. A small sample CSV is also included at `evaluation/datasets/CICIDS2017_sample.csv` for reference; large external datasets such as CSE-CIC-IDS2018 are not bundled.)
 
 ### Programmatic/pipeline usage
 The core orchestration lives in `pipeline.py` (`NIDSPipeline`, `ProcessingWorker`). It can be used to process packets/flows through the full detection chain and access generated alerts/statistics.
@@ -141,7 +154,7 @@ python -m pytest tests -q --tb=short --disable-warnings --ignore=tests/test_live
 - Some detection thresholds are initial and may require calibration for your environment.
 - Live capture and end-to-end VM/lab validation depend on network/interface/permission setup.
 - Audit reports in `docs/` describe known issues and improvement areas (e.g. flow timeout behavior, label-mapping robustness, alert dedup confidence semantics).
-- Large datasets, generated evaluation artifacts, and model binaries may be excluded from this GitHub repo by `.gitignore` to keep the repository size manageable.
+- To keep the repo manageable, large external datasets (e.g. CSE-CIC-IDS2018) and many generated evaluation artifacts/results are excluded by `.gitignore`. A default trained model (`models/nids_model.joblib`) and a small sample dataset (`evaluation/datasets/CICIDS2017_sample.csv`) are included for quick setup.
 
 ## Additional documentation
 
