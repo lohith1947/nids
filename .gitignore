@@ -29,8 +29,12 @@ evaluation/datasets/*attribution_log*.json
 evaluation/live_test_dataset.jsonl
 evaluation/results/*.json
 
-# Trained model artifacts (can be large)
-models/*.joblib
+# Keep small/sample files needed for easy setup/repro
+!evaluation/datasets/CICIDS2017_sample.csv
+
+# Trained model artifacts (keep default runtime model)
+models/*
+!models/nids_model.joblib
 
 # Logs/temp
 *.log
