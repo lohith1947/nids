@@ -6,6 +6,52 @@ A Python-based, flow-oriented Network Intrusion Detection System ("NIDS Sentinel
 
 ## How the project works
 
+### End-to-end flow
+
+```text
+Network traffic (live capture or PCAP replay)
+        │
+        ▼
+packet_capture.py / dashboard.py
+  - sniff packets (Scapy) or read PCAP
+  - parse 5-tuple, protocol, flags, size, timestamp
+        │
+        ▼
+flow_manager.py + flow.py
+  - group packets into bidirectional flows (5-tuple)
+  - track per-flow stats (duration, pkt/byte counts, TCP flags, size/rate stats)
+  - emit completed/expired flows
+        │
+        ▼
+flow.get_features()  (18-feature vector, schema in features.py)
+        │
+        ├───────────────────────────────┐
+        ▼                               ▼
+rule_engine.py                    model.py
+(threshold/stateful rules,        (StandardScaler + RandomForest
+ config.py)                        on 18 features)
+  - rule prediction/confidence      - ML prediction/confidence/probabilities
+  - triggered rules
+        └───────────────┬───────────────┘
+                        ▼
+                correlator.py
+          fuse rule + ML into final detection
+                        │
+                        ▼
+                risk_scorer.py
+            prediction/confidence → risk score + severity
+                        │
+                        ▼
+                  alerts.py
+        create/store alert (dedup/rate-limit, explanation, metadata)
+                        │
+                        ▼
+        dashboard.py + dashboard_data.py (Streamlit "Sentinel")
+          KPIs, charts, recent alerts, alert details
+```
+
+**Pipeline orchestration:** `pipeline.py` (`NIDSPipeline`) runs this chain per completed flow with per-stage error handling. `ProcessingWorker` can process packets from a queue in a background thread (used by the dashboard).
+
 ### 1. Packet ingestion
 - **Live capture:** `packet_capture.py` uses Scapy to sniff packets from a network interface.
 - **PCAP replay:** `dashboard.py` can replay uploaded `.pcap/.pcapng` files through the same pipeline.
