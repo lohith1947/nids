@@ -1,0 +1,36 @@
+﻿# Python caches/build
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environments
+.venv/
+venv/
+env/
+
+# IDE/editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large evaluation datasets and generated artifacts
+evaluation/datasets/*.csv
+evaluation/datasets/*.jsonl
+evaluation/datasets/*.json
+evaluation/datasets/*_per_flow_*.csv
+evaluation/datasets/*collection_log*.txt
+evaluation/datasets/*attribution_log*.json
+evaluation/live_test_dataset.jsonl
+evaluation/results/*.json
+
+# Trained model artifacts (can be large)
+models/*.joblib
+
+# Logs/temp
+*.log

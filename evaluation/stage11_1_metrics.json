@@ -1,0 +1,574 @@
+{
+  "phase1_cleaning": {
+    "original_rows": 56661,
+    "duplicate_rows": 15851,
+    "cleaned_rows": 40810,
+    "original_distribution": {
+      "BENIGN": 22731,
+      "PORT_SCAN": 7946,
+      "BRUTE_FORCE": 4947,
+      "DOS": 21001,
+      "RECONNAISSANCE": 36
+    },
+    "cleaned_distribution": {
+      "BENIGN": 19198,
+      "PORT_SCAN": 323,
+      "BRUTE_FORCE": 3658,
+      "DOS": 17595,
+      "RECONNAISSANCE": 36
+    }
+  },
+  "phase2_clean_holdout": {
+    "accuracy": 0.9823572653761333,
+    "macro_precision": 0.9403722860141818,
+    "macro_recall": 0.9134835161617841,
+    "macro_f1": 0.9259986563160083,
+    "weighted_precision": 0.982355810189344,
+    "weighted_recall": 0.9823572653761333,
+    "weighted_f1": 0.9823470977016782,
+    "confusion_matrix": [
+      [
+        3778,
+        2,
+        28,
+        30,
+        1
+      ],
+      [
+        4,
+        60,
+        1,
+        0,
+        0
+      ],
+      [
+        30,
+        0,
+        702,
+        0,
+        0
+      ],
+      [
+        44,
+        2,
+        0,
+        3473,
+        0
+      ],
+      [
+        2,
+        0,
+        0,
+        0,
+        5
+      ]
+    ],
+    "per_class": {
+      "BENIGN": {
+        "precision": 0.9792638672887507,
+        "recall": 0.984110445428497,
+        "f1": 0.9816811744835651,
+        "support": 3839
+      },
+      "PORT_SCAN": {
+        "precision": 0.9375,
+        "recall": 0.9230769230769231,
+        "f1": 0.9302325581395349,
+        "support": 65
+      },
+      "BRUTE_FORCE": {
+        "precision": 0.960328317373461,
+        "recall": 0.9590163934426229,
+        "f1": 0.9596719070403281,
+        "support": 732
+      },
+      "DOS": {
+        "precision": 0.991435912075364,
+        "recall": 0.9869281045751634,
+        "f1": 0.9891768726858445,
+        "support": 3519
+      },
+      "RECONNAISSANCE": {
+        "precision": 0.8333333333333334,
+        "recall": 0.7142857142857143,
+        "f1": 0.7692307692307693,
+        "support": 7
+      }
+    }
+  },
+  "phase3_comparison": {
+    "rows": [
+      [
+        "Metric",
+        "Original IID",
+        "Clean IID",
+        "Delta"
+      ],
+      [
+        "Accuracy",
+        "0.9677",
+        "0.9824",
+        "+0.0147"
+      ],
+      [
+        "Macro F1",
+        "0.8610",
+        "0.9260",
+        "+0.0650"
+      ],
+      [
+        "Weighted F1",
+        "0.9675",
+        "0.9823",
+        "+0.0148"
+      ],
+      [
+        "BENIGN F1",
+        "0.9596",
+        "0.9817",
+        "+0.0221"
+      ],
+      [
+        "PORT_SCAN F1",
+        "0.9991",
+        "0.9302",
+        "-0.0688"
+      ],
+      [
+        "BRUTE_FORCE F1",
+        "0.9270",
+        "0.9597",
+        "+0.0326"
+      ],
+      [
+        "DOS F1",
+        "0.9747",
+        "0.9892",
+        "+0.0145"
+      ],
+      [
+        "RECON F1",
+        "0.4444",
+        "0.7692",
+        "+0.3248"
+      ]
+    ]
+  },
+  "phase4_cross_validation": {
+    "summary": {
+      "accuracy": {
+        "mean": 0.9814751286449399,
+        "std": 0.001538869734683419
+      },
+      "macro_f1": {
+        "mean": 0.9345726516020114,
+        "std": 0.024228513969020704
+      },
+      "weighted_f1": {
+        "mean": 0.9814511065071436,
+        "std": 0.0015414522035713018
+      }
+    },
+    "per_class": {
+      "BENIGN": {
+        "precision_mean": 0.9777023419775992,
+        "precision_std": 0.0028681423082951483,
+        "recall_mean": 0.9840608448380654,
+        "recall_std": 0.0009659806546332105,
+        "f1_mean": 0.9808695485344879,
+        "f1_std": 0.0017049851848027595,
+        "total_support": 19198,
+        "per_fold_support": [
+          3840,
+          3840,
+          3840,
+          3839,
+          3839
+        ]
+      },
+      "PORT_SCAN": {
+        "precision_mean": 0.9521586770664108,
+        "precision_std": 0.023520328990761164,
+        "recall_mean": 0.9628846153846154,
+        "recall_std": 0.026836485061821562,
+        "f1_mean": 0.9569417384682734,
+        "f1_std": 0.010482967214526696,
+        "total_support": 323,
+        "per_fold_support": [
+          65,
+          64,
+          64,
+          65,
+          65
+        ]
+      },
+      "BRUTE_FORCE": {
+        "precision_mean": 0.9573345127743849,
+        "precision_std": 0.006598699635304634,
+        "recall_mean": 0.9562621007228664,
+        "recall_std": 0.00737780166695839,
+        "f1_mean": 0.9567824492909379,
+        "f1_std": 0.005829589315136187,
+        "total_support": 3658,
+        "per_fold_support": [
+          731,
+          731,
+          732,
+          732,
+          732
+        ]
+      },
+      "DOS": {
+        "precision_mean": 0.991306693595883,
+        "precision_std": 0.0010464163793392144,
+        "recall_mean": 0.9848252344416029,
+        "recall_std": 0.0023197876251160646,
+        "f1_mean": 0.9880530714999081,
+        "f1_std": 0.0010085264227918003,
+        "total_support": 17595,
+        "per_fold_support": [
+          3519,
+          3519,
+          3519,
+          3519,
+          3519
+        ]
+      },
+      "RECONNAISSANCE": {
+        "precision_mean": 0.975,
+        "precision_std": 0.049999999999999996,
+        "recall_mean": 0.6928571428571428,
+        "recall_std": 0.1911298308608522,
+        "f1_mean": 0.7902164502164503,
+        "f1_std": 0.115728010419128,
+        "total_support": 36,
+        "per_fold_support": [
+          7,
+          8,
+          7,
+          7,
+          7
+        ]
+      }
+    },
+    "recon_cv_statistically_meaningful": true
+  },
+  "phase5_ablation": {
+    "All 18 features": {
+      "accuracy": 0.9823572653761333,
+      "macro_precision": 0.9403722860141818,
+      "macro_recall": 0.9134835161617841,
+      "macro_f1": 0.9259986563160083,
+      "weighted_precision": 0.982355810189344,
+      "weighted_recall": 0.9823572653761333,
+      "weighted_f1": 0.9823470977016782,
+      "confusion_matrix": [
+        [
+          3778,
+          2,
+          28,
+          30,
+          1
+        ],
+        [
+          4,
+          60,
+          1,
+          0,
+          0
+        ],
+        [
+          30,
+          0,
+          702,
+          0,
+          0
+        ],
+        [
+          44,
+          2,
+          0,
+          3473,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          5
+        ]
+      ],
+      "per_class": {
+        "BENIGN": {
+          "precision": 0.9792638672887507,
+          "recall": 0.984110445428497,
+          "f1": 0.9816811744835651,
+          "support": 3839
+        },
+        "PORT_SCAN": {
+          "precision": 0.9375,
+          "recall": 0.9230769230769231,
+          "f1": 0.9302325581395349,
+          "support": 65
+        },
+        "BRUTE_FORCE": {
+          "precision": 0.960328317373461,
+          "recall": 0.9590163934426229,
+          "f1": 0.9596719070403281,
+          "support": 732
+        },
+        "DOS": {
+          "precision": 0.991435912075364,
+          "recall": 0.9869281045751634,
+          "f1": 0.9891768726858445,
+          "support": 3519
+        },
+        "RECONNAISSANCE": {
+          "precision": 0.8333333333333334,
+          "recall": 0.7142857142857143,
+          "f1": 0.7692307692307693,
+          "support": 7
+        }
+      }
+    },
+    "Remove syn_count": {
+      "accuracy": 0.9819897084048027,
+      "macro_precision": 0.9400147958751077,
+      "macro_recall": 0.9102929244289928,
+      "macro_f1": 0.9241903754204148,
+      "weighted_precision": 0.9819850901833457,
+      "weighted_recall": 0.9819897084048027,
+      "weighted_f1": 0.9819757057117877,
+      "confusion_matrix": [
+        [
+          3778,
+          2,
+          28,
+          30,
+          1
+        ],
+        [
+          4,
+          59,
+          1,
+          1,
+          0
+        ],
+        [
+          30,
+          0,
+          702,
+          0,
+          0
+        ],
+        [
+          46,
+          2,
+          0,
+          3471,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          5
+        ]
+      ],
+      "per_class": {
+        "BENIGN": {
+          "precision": 0.9787564766839378,
+          "recall": 0.984110445428497,
+          "f1": 0.9814261592414599,
+          "support": 3839
+        },
+        "PORT_SCAN": {
+          "precision": 0.9365079365079365,
+          "recall": 0.9076923076923077,
+          "f1": 0.921875,
+          "support": 65
+        },
+        "BRUTE_FORCE": {
+          "precision": 0.960328317373461,
+          "recall": 0.9590163934426229,
+          "f1": 0.9596719070403281,
+          "support": 732
+        },
+        "DOS": {
+          "precision": 0.9911479154768703,
+          "recall": 0.9863597612958227,
+          "f1": 0.9887480415895171,
+          "support": 3519
+        },
+        "RECONNAISSANCE": {
+          "precision": 0.8333333333333334,
+          "recall": 0.7142857142857143,
+          "f1": 0.7692307692307693,
+          "support": 7
+        }
+      }
+    },
+    "Remove rst_count": {
+      "accuracy": 0.9823572653761333,
+      "macro_precision": 0.9401756772299696,
+      "macro_recall": 0.9132529141629033,
+      "macro_f1": 0.9257832606670551,
+      "weighted_precision": 0.9823699133999008,
+      "weighted_recall": 0.9823572653761333,
+      "weighted_f1": 0.9823501189076229,
+      "confusion_matrix": [
+        [
+          3781,
+          2,
+          29,
+          26,
+          1
+        ],
+        [
+          4,
+          60,
+          1,
+          0,
+          0
+        ],
+        [
+          31,
+          0,
+          701,
+          0,
+          0
+        ],
+        [
+          46,
+          2,
+          0,
+          3471,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          5
+        ]
+      ],
+      "per_class": {
+        "BENIGN": {
+          "precision": 0.9785196687370601,
+          "recall": 0.9848918989320136,
+          "f1": 0.981695443333766,
+          "support": 3839
+        },
+        "PORT_SCAN": {
+          "precision": 0.9375,
+          "recall": 0.9230769230769231,
+          "f1": 0.9302325581395349,
+          "support": 65
+        },
+        "BRUTE_FORCE": {
+          "precision": 0.9589603283173734,
+          "recall": 0.9576502732240437,
+          "f1": 0.9583048530416951,
+          "support": 732
+        },
+        "DOS": {
+          "precision": 0.9925650557620818,
+          "recall": 0.9863597612958227,
+          "f1": 0.9894526795895097,
+          "support": 3519
+        },
+        "RECONNAISSANCE": {
+          "precision": 0.8333333333333334,
+          "recall": 0.7142857142857143,
+          "f1": 0.7692307692307693,
+          "support": 7
+        }
+      }
+    },
+    "Remove syn_count + rst_count": {
+      "accuracy": 0.9819897084048027,
+      "macro_precision": 0.9400109613896215,
+      "macro_recall": 0.9100717972855115,
+      "macro_f1": 0.9240771938852508,
+      "weighted_precision": 0.9819856602519009,
+      "weighted_recall": 0.9819897084048027,
+      "weighted_f1": 0.981974882921901,
+      "confusion_matrix": [
+        [
+          3779,
+          2,
+          28,
+          29,
+          1
+        ],
+        [
+          4,
+          59,
+          1,
+          1,
+          0
+        ],
+        [
+          31,
+          0,
+          701,
+          0,
+          0
+        ],
+        [
+          46,
+          2,
+          0,
+          3471,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          5
+        ]
+      ],
+      "per_class": {
+        "BENIGN": {
+          "precision": 0.9785085447954428,
+          "recall": 0.9843709299296692,
+          "f1": 0.9814309829892222,
+          "support": 3839
+        },
+        "PORT_SCAN": {
+          "precision": 0.9365079365079365,
+          "recall": 0.9076923076923077,
+          "f1": 0.921875,
+          "support": 65
+        },
+        "BRUTE_FORCE": {
+          "precision": 0.9602739726027397,
+          "recall": 0.9576502732240437,
+          "f1": 0.9589603283173734,
+          "support": 732
+        },
+        "DOS": {
+          "precision": 0.9914310197086547,
+          "recall": 0.9863597612958227,
+          "f1": 0.9888888888888889,
+          "support": 3519
+        },
+        "RECONNAISSANCE": {
+          "precision": 0.8333333333333334,
+          "recall": 0.7142857142857143,
+          "f1": 0.7692307692307693,
+          "support": 7
+        }
+      }
+    }
+  },
+  "phase6_loopback": {
+    "status": "NO LOOPBACK DATASET FOUND. The CICIDS2017 sample contains no 127.0.0.1 traffic. Live tests generate synthetic loopback traffic but do not persist it. To perform a controlled loopback evaluation, capture and label a dataset of benign loopback flows (e.g., local HTTP, DNS, SSH, database connections) and malicious loopback flows (e.g., localhost SYN floods, local port scans). Minimum recommended: 500 benign + 500 attack loopback flows, labeled by class."
+  },
+  "phase7_recommendation": "A. KEEP CURRENT MODEL AS BASELINE"
+}

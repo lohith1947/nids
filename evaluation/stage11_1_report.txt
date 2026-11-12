@@ -1,0 +1,238 @@
+================================================================================
+STAGE 11.1: LEAKAGE-FREE ML EVALUATION REPORT
+================================================================================
+
+CONSTRAINTS: Read-only evaluation. No production code, model,
+thresholds, or tests were modified.
+
+--------------------------------------------------------------------------------
+PHASE 1: DATASET CLEANING
+--------------------------------------------------------------------------------
+
+FACT: Original dataset rows           : 56661
+FACT: Exact duplicate rows removed     : 15851
+FACT: Cleaned dataset rows             : 40810
+FACT: Duplicate fraction of original   : 27.98%
+
+FACT: Class distribution BEFORE cleaning:
+  BENIGN              :  22731
+  PORT_SCAN           :   7946
+  BRUTE_FORCE         :   4947
+  DOS                 :  21001
+  RECONNAISSANCE      :     36
+
+FACT: Class distribution AFTER cleaning:
+  BENIGN              :  19198
+  PORT_SCAN           :    323
+  BRUTE_FORCE         :   3658
+  DOS                 :  17595
+  RECONNAISSANCE      :     36
+
+MEASUREMENT: Phase 1 time: 0.39s
+
+--------------------------------------------------------------------------------
+PHASE 2: LEAKAGE-FREE HOLDOUT RESULTS
+--------------------------------------------------------------------------------
+
+FACT: Split: stratified 80/20, random_state=42
+FACT: Clean train size : 32648
+FACT: Clean test size  : 8162
+
+FACT: Model configuration:
+  RandomForestClassifier(n_estimators=200, max_depth=20,
+                          random_state=42, n_jobs=-1)
+  StandardScaler (fit on train, transform train+test)
+
+MEASUREMENT: Overall metrics (clean holdout):
+  Accuracy          : 0.9824
+  Macro Precision   : 0.9404
+  Macro Recall      : 0.9135
+  Macro F1          : 0.9260
+  Weighted Precision: 0.9824
+  Weighted Recall   : 0.9824
+  Weighted F1       : 0.9823
+
+MEASUREMENT: Per-class metrics (clean holdout):
+  BENIGN              : P=0.9793  R=0.9841  F1=0.9817  support=3839
+  PORT_SCAN           : P=0.9375  R=0.9231  F1=0.9302  support=65
+  BRUTE_FORCE         : P=0.9603  R=0.9590  F1=0.9597  support=732
+  DOS                 : P=0.9914  R=0.9869  F1=0.9892  support=3519
+  RECONNAISSANCE      : P=0.8333  R=0.7143  F1=0.7692  support=7
+
+MEASUREMENT: Confusion matrix (clean holdout):
+      BENIGN      PORT_SCAN   BRUTE_FORCE  DOS         RECONNAISSANCE
+BENIGN    3778     2    28    30     1
+PORT_SCAN    4    60     1     0     0
+BRUTE_FORCE  30     0   702     0     0
+DOS         44     2     0  3473     0
+RECONNAISSANCE   2     0     0     0     5
+
+MEASUREMENT: Phase 2 time: 2.07s
+
+--------------------------------------------------------------------------------
+PHASE 3: ORIGINAL vs CLEAN COMPARISON
+--------------------------------------------------------------------------------
+
+MEASUREMENT: Both models trained with identical configuration
+            (RF-200, depth=20, random_state=42, StandardScaler).
+            Original: IID split with duplicates. Clean: duplicates removed first.
+
+  Metric              : Original IID   Clean IID       Delta
+  Accuracy            :     0.9677      0.9824     +0.0147
+  Macro F1            :     0.8610      0.9260     +0.0650
+  Weighted F1         :     0.9675      0.9823     +0.0148
+  BENIGN F1           :     0.9596      0.9817     +0.0221
+  PORT_SCAN F1        :     0.9991      0.9302     -0.0688
+  BRUTE_FORCE F1      :     0.9270      0.9597     +0.0326
+  DOS F1              :     0.9747      0.9892     +0.0145
+  RECON F1            :     0.4444      0.7692     +0.3248
+
+INFERENCE: See individual metric deltas above.
+
+--------------------------------------------------------------------------------
+PHASE 4: 5-FOLD STRATIFIED CROSS-VALIDATION
+--------------------------------------------------------------------------------
+
+FACT: Folds                    : 5
+FACT: Stratified               : Yes
+FACT: Random state             : 42
+FACT: Clean dataset size       : 40810
+
+MEASUREMENT: Cross-validation results:
+  Accuracy    : 0.9815 +/- 0.0015
+  Macro F1    : 0.9346 +/- 0.0242
+  Weighted F1 : 0.9815 +/- 0.0015
+
+MEASUREMENT: Per-class CV metrics:
+  BENIGN              :
+    Precision : 0.9777 +/- 0.0029
+    Recall    : 0.9841 +/- 0.0010
+    F1        : 0.9809 +/- 0.0017
+    Support   : 19198 (per fold: 3840, 3840, 3840, 3839, 3839)
+  PORT_SCAN           :
+    Precision : 0.9522 +/- 0.0235
+    Recall    : 0.9629 +/- 0.0268
+    F1        : 0.9569 +/- 0.0105
+    Support   : 323 (per fold: 65, 64, 64, 65, 65)
+  BRUTE_FORCE         :
+    Precision : 0.9573 +/- 0.0066
+    Recall    : 0.9563 +/- 0.0074
+    F1        : 0.9568 +/- 0.0058
+    Support   : 3658 (per fold: 731, 731, 732, 732, 732)
+  DOS                 :
+    Precision : 0.9913 +/- 0.0010
+    Recall    : 0.9848 +/- 0.0023
+    F1        : 0.9881 +/- 0.0010
+    Support   : 17595 (per fold: 3519, 3519, 3519, 3519, 3519)
+  RECONNAISSANCE      :
+    Precision : 0.9750 +/- 0.0500
+    Recall    : 0.6929 +/- 0.1911
+    F1        : 0.7902 +/- 0.1157
+    Support   : 36 (per fold: 7, 8, 7, 7, 7)
+
+NOTE: RECONNAISSANCE has sufficient samples for CV.
+
+MEASUREMENT: Phase 4 time: 4.61s
+
+--------------------------------------------------------------------------------
+PHASE 5: FEATURE ABLATION
+--------------------------------------------------------------------------------
+
+FACT: All experiments use the SAME cleaned stratified split (random_state=42).
+FACT: Model configuration unchanged (RF-200, depth=20).
+
+Configuration                         Accuracy   Macro F1     DOS F1   RECON F1  BENIGN F1
+-------------------------------------------------------------------------------------
+All 18 features                         0.9824     0.9260     0.9892     0.7692     0.9817
+Remove syn_count                        0.9820     0.9242     0.9887     0.7692     0.9814
+Remove rst_count                        0.9824     0.9258     0.9895     0.7692     0.9817
+Remove syn_count + rst_count            0.9820     0.9241     0.9889     0.7692     0.9814
+
+MEASUREMENT: All 18 features
+  Accuracy          : 0.9824
+  Macro F1          : 0.9260
+  Weighted F1       : 0.9823
+  BENIGN              : P=0.9793  R=0.9841  F1=0.9817  support=3839
+  PORT_SCAN           : P=0.9375  R=0.9231  F1=0.9302  support=65
+  BRUTE_FORCE         : P=0.9603  R=0.9590  F1=0.9597  support=732
+  DOS                 : P=0.9914  R=0.9869  F1=0.9892  support=3519
+  RECONNAISSANCE      : P=0.8333  R=0.7143  F1=0.7692  support=7
+
+MEASUREMENT: Remove syn_count
+  Accuracy          : 0.9820
+  Macro F1          : 0.9242
+  Weighted F1       : 0.9820
+  BENIGN              : P=0.9788  R=0.9841  F1=0.9814  support=3839
+  PORT_SCAN           : P=0.9365  R=0.9077  F1=0.9219  support=65
+  BRUTE_FORCE         : P=0.9603  R=0.9590  F1=0.9597  support=732
+  DOS                 : P=0.9911  R=0.9864  F1=0.9887  support=3519
+  RECONNAISSANCE      : P=0.8333  R=0.7143  F1=0.7692  support=7
+
+MEASUREMENT: Remove rst_count
+  Accuracy          : 0.9824
+  Macro F1          : 0.9258
+  Weighted F1       : 0.9824
+  BENIGN              : P=0.9785  R=0.9849  F1=0.9817  support=3839
+  PORT_SCAN           : P=0.9375  R=0.9231  F1=0.9302  support=65
+  BRUTE_FORCE         : P=0.9590  R=0.9577  F1=0.9583  support=732
+  DOS                 : P=0.9926  R=0.9864  F1=0.9895  support=3519
+  RECONNAISSANCE      : P=0.8333  R=0.7143  F1=0.7692  support=7
+
+MEASUREMENT: Remove syn_count + rst_count
+  Accuracy          : 0.9820
+  Macro F1          : 0.9241
+  Weighted F1       : 0.9820
+  BENIGN              : P=0.9785  R=0.9844  F1=0.9814  support=3839
+  PORT_SCAN           : P=0.9365  R=0.9077  F1=0.9219  support=65
+  BRUTE_FORCE         : P=0.9603  R=0.9577  F1=0.9590  support=732
+  DOS                 : P=0.9914  R=0.9864  F1=0.9889  support=3519
+  RECONNAISSANCE      : P=0.8333  R=0.7143  F1=0.7692  support=7
+
+INFERENCE: syn_count and rst_count have near-zero importance in the
+full model. Ablation determines whether they materially affect metrics.
+
+--------------------------------------------------------------------------------
+PHASE 6: LOOPBACK EVALUATION
+--------------------------------------------------------------------------------
+
+FACT: NO LOOPBACK DATASET FOUND. The CICIDS2017 sample contains no 127.0.0.1 traffic. Live tests generate synthetic loopback traffic but do not persist it. To perform a controlled loopback evaluation, capture and label a dataset of benign loopback flows (e.g., local HTTP, DNS, SSH, database connections) and malicious loopback flows (e.g., localhost SYN floods, local port scans). Minimum recommended: 500 benign + 500 attack loopback flows, labeled by class.
+
+INFERENCE: Without a labeled loopback dataset, a controlled ML
+evaluation on loopback traffic is impossible. The current model was
+trained exclusively on CICIDS2017, which contains no loopback flows.
+
+RECOMMENDATION: Capture a labeled loopback dataset before declaring
+the model safe for loopback environments.
+
+--------------------------------------------------------------------------------
+PHASE 7: FINAL BASELINE DECISION
+--------------------------------------------------------------------------------
+
+RECOMMENDATION: A. KEEP CURRENT MODEL AS BASELINE
+
+RATIONALE:
+  - Leakage-free accuracy: 0.9824
+  - Leakage-free macro F1: 0.9260
+  - CV macro F1 mean +/- std: 0.9346 +/- 0.0242
+  - RECONNAISSANCE F1 (clean): 0.7692
+  - Loopback evaluation: NOT POSSIBLE (no labeled loopback dataset)
+
+CAVEATS:
+  - Accuracy remains high after duplicate removal (no major leakage artifact).
+  - Macro F1 is dominated by RECONNAISSANCE underperformance.
+  - 5-fold CV shows stability for majority classes; RECON is unstable.
+  - Loopback safety is unvalidated.
+
+================================================================================
+SUMMARY: ORIGINAL vs CLEAN vs CV
+================================================================================
+
+  Metric                        Original        Clean      CV Mean       CV Std
+  -------------------------------------------------------------------------
+  Accuracy                        0.9677       0.9824       0.9815       0.0015
+  Macro F1                        0.8610       0.9260       0.9346       0.0242
+  Weighted F1                     0.9675       0.9823       0.9815       0.0015
+
+================================================================================
+END OF REPORT
+================================================================================
